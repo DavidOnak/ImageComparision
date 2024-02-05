@@ -97,8 +97,8 @@
       /*get the cursor's x position:*/
       pos = getCursorPos(e)
       /*prevent the slider from being positioned outside the image:*/
-      if (pos < 0) pos = 0;
-      if (pos > w) pos = w;
+      if (pos < 15) pos = 15;
+      if (pos > w-15) pos = w-15;
       /*execute a function that will resize the overlay image according to the cursor:*/
       slide(pos);
     }
