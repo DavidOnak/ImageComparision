@@ -64,6 +64,7 @@
       // Remove old event listeners
       slider.removeEventListener("mousedown", slideReady);
       window.removeEventListener("mouseup", slideFinish);
+      window.removeEventListener("mouseleave", slideFinish);
       slider.removeEventListener("touchstart", slideReady);
       window.removeEventListener("touchend", slideFinish);
       window.removeEventListener("mousemove", slideMove);
@@ -73,6 +74,8 @@
     slider.addEventListener("mousedown", slideReady);
     /*and another function when the mouse button is released:*/
     window.addEventListener("mouseup", slideFinish);
+    /*and another function when the mouse button leaves element:*/
+    window.addEventListener("mouseleave", slideFinish);
     /*or touched (for touch screens:*/
     slider.addEventListener("touchstart", slideReady);
     /*and released (for touch screens:*/
