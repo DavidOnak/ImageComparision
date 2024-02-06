@@ -22,6 +22,10 @@
     width: 100%;
   }
 
+  #img-comp-overlay {
+    max-width: 100%;
+  }
+
   .img-comp-img img {
     display:block;
     height: auto;
@@ -40,9 +44,11 @@
   }
 </style>
 <script>
+  var slider, img, clicked = 0, w, h;
+
   function compareImages(init) {
-    var slider, img, clicked = 0, w, h;
     img = document.getElementById("img-comp-overlay");
+    comtainer = document.getElementById('container');
     w = document.getElementById("img-comp-base").offsetWidth;
     h = document.getElementById("img-comp-base").offsetHeight;
     slider = document.getElementById("slider");
@@ -54,74 +60,65 @@
 
       /*set the width of the img element to 50%:*/
       img.style.width = (img.offsetWidth / 2) + "px";
+
+      slider.addEventListener("mousedown", slideReady);
+      /*and another function when the mouse button is released:*/
+      window.addEventListener("mouseup", slideFinish);
+      /*and another function when the mouse button leaves element:*/
+      comtainer.addEventListener("mouseleave", slideFinish);
+      /*or touched (for touch screens:*/
+      slider.addEventListener("touchstart", slideReady);
+      /*and released (for touch screens:*/
+      window.addEventListener("touchend", slideFinish);
+
     } else { 
       offset = document.getElementById("baseImg").style.width;
         
       slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";  
+    }
+  }
 
-      if ((slider.style.left + 15) > offset) slider.style.left = offset - 15;
-
-      // Remove old event listeners
-      slider.removeEventListener("mousedown", slideReady);
-      window.removeEventListener("mouseup", slideFinish);
-      slider.removeEventListener("mouseleave", slideFinish);
-      slider.removeEventListener("touchstart", slideReady);
-      window.removeEventListener("touchend", slideFinish);
-      window.removeEventListener("mousemove", slideMove);
-      window.removeEventListener("touchmove", slideMove);
+  function slideReady(e) {
+    /*prevent any other actions that may occur when moving over the image:*/
+    e.preventDefault();
+    /*the slider is now clicked and ready to move:*/
+    clicked = 1;
+    /*execute a function when the slider is moved:*/
+    window.addEventListener("mousemove", slideMove);
+    window.addEventListener("touchmove", slideMove);
+  }
+  function slideFinish() {
+      /*the slider is no longer clicked:*/
+      clicked = 0;
     }
-
-    slider.addEventListener("mousedown", slideReady);
-    /*and another function when the mouse button is released:*/
-    window.addEventListener("mouseup", slideFinish);
-    /*and another function when the mouse button leaves element:*/
-    slider.addEventListener("mouseleave", slideFinish);
-    /*or touched (for touch screens:*/
-    slider.addEventListener("touchstart", slideReady);
-    /*and released (for touch screens:*/
-    window.addEventListener("touchend", slideFinish);
-    function slideReady(e) {
-      /*prevent any other actions that may occur when moving over the image:*/
-      e.preventDefault();
-      /*the slider is now clicked and ready to move:*/
-      clicked = 1;
-      /*execute a function when the slider is moved:*/
-      window.addEventListener("mousemove", slideMove);
-      window.addEventListener("touchmove", slideMove);
-    }
-    function slideFinish() {
-        /*the slider is no longer clicked:*/
-        clicked = 0;
-      }
-    function slideMove(e) {
-      var pos;
-      /*if the slider is no longer clicked, exit this function:*/
-      if (clicked == 0) return false;
-      /*get the cursor's x position:*/
-      pos = getCursorPos(e)
-      /*prevent the slider from being positioned outside the image:*/
-      if (pos < 15) pos = 15;
-      if (pos > w-15) pos = w-15;
-      /*execute a function that will resize the overlay image according to the cursor:*/
-      slide(pos);
-    }
-    function getCursorPos(e) {
-      var a, x = 0;
-      e = (e.changedTouches) ? e.changedTouches[0] : e;
-      /*get the x positions of the image:*/
-      a = img.getBoundingClientRect();
-      /*calculate the cursor's x coordinate, relative to the image:*/
-      x = e.pageX - a.left;
-      /*consider any page scrolling:*/
-      x = x - window.pageXOffset;
-      return x;
-    }
-    function slide(pos) {
-      /*resize the image:*/
-      img.style.width = pos + "px";
-      /*position the slider:*/
-      slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
-    }
+  function slideMove(e) {
+    var pos;
+    /*if the slider is no longer clicked, exit this function:*/
+    if (clicked == 0) return false;
+    /*get the cursor's x position:*/
+    pos = getCursorPos(e)
+    /*prevent the slider from being positioned outside the image:*/
+    if (pos < 10) pos = 10;
+    if (pos > w-10) pos = w-10;
+    /*execute a function that will resize the overlay image according to the cursor:*/
+    slide(pos);
+  }
+  function getCursorPos(e) {
+    var a, x = 0;
+    e = (e.changedTouches) ? e.changedTouches[0] : e;
+    /*get the x positions of the image:*/
+    a = img.getBoundingClientRect();
+    /*calculate the cursor's x coordinate, relative to the image:*/
+    x = e.pageX - a.left;
+    /*consider any page scrolling:*/
+    x = x - window.pageXOffset;
+    return x;
+  }
+  function slide(pos) {
+    /*resize the image:*/
+    img.style.width = pos + "px";
+    /*position the slider:*/
+    slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
   }
 
   // Will make sure both images have the same width
@@ -137,7 +134,7 @@
 </script>
 </head>
 <body>
-  <div class="img-comp-container">
+  <div id="container" class="img-comp-container">
     <div id="img-comp-base" class="img-comp-img">
       <img id="baseImg" src="https://s3.ca-central-1.amazonaws.com/ehq-production-canada/b4d8b73fbebefd3ea0c3c126e62ad590f83f3692/original/1705616020/2bcd37e0238d44e715a8564256b05682_SMU_Dashboard.png?1705616020" width="800" height="534">
     </div>
