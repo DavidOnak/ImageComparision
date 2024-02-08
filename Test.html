@@ -149,9 +149,10 @@
       adjustImageWidth();
       /*Execute a function that will execute an image compare function for each element with the img-comp-overlay element*/
       compareImages(true);
-      adjustImageWidth(); // Sometimes width gets updated after compare images and adjustment is needed
-      
+
       window.addEventListener('resize', function() {adjustImageWidth(); compareImages(false);});
+
+      window.requestAnimationFrame(function() { adjustImageWidth(); }); // Sometimes width gets updated after compare images and adjustment is needed
     };
   </script>
 </body>
