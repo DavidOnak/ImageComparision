@@ -123,7 +123,7 @@
 
   // Will make sure both images have the same width
   function adjustImageWidth() {   
-    var baseID = document.getElementById('baseImg');   
+    var baseID = document.getElementById('img-comp-base');   
     var overlayID = document.getElementById('overlayImg');  
       
     // Set the width of overlaying image to be the same as the base image  
@@ -149,6 +149,8 @@
       adjustImageWidth();
       /*Execute a function that will execute an image compare function for each element with the img-comp-overlay element*/
       compareImages(true);
+      adjustImageWidth(); // Sometimes width gets updated after compare images and adjustment is needed
+      
       window.addEventListener('resize', function() {adjustImageWidth(); compareImages(false);});
     };
   </script>
