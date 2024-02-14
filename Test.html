@@ -86,7 +86,11 @@
     } else { 
       offset = document.getElementById("baseImg").style.width;
         
-      slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";  
+      slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
+      
+      // Set slider left pos so it can't go off the image when resizing
+      if (img.offsetWidth === w) slider.style.left = w - 25 + "px";
+      else slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
     }
   }
 
